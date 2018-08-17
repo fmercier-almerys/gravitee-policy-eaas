@@ -46,15 +46,13 @@ public class EncryptionService {
 
     private final static Logger logger = LoggerFactory.getLogger(EncryptionService.class);
 
-    private static final String HTTPS_SCHEME = "https";
-
     private static final int GLOBAL_TIMEOUT = 10000;
 
     private EncryptionPolicyConfiguration policyConfiguration;
 
     private AsyncVaultEngine encryptEngine;
 
-    private ObjectMapper objectMapper = new ObjectMapper();
+    private static ObjectMapper objectMapper = new ObjectMapper();
 
     private HttpClientOptions options;
 
@@ -106,18 +104,18 @@ public class EncryptionService {
                             super.write(Buffer.buffer(content));
                             super.end();
                         } catch (JsonProcessingException e) {
-                            handleError(request, e, policyChain, HttpStatusCode.INTERNAL_SERVER_ERROR_500);
+                            handleError(request, e, policyChain);
                         }
-                    }, e ->handleError(request, e, policyChain, HttpStatusCode.BAD_REQUEST_400));
+                    }, e ->handleError(request, e, policyChain));
                 } catch (Exception e) {
-                    handleError(request, e, policyChain, HttpStatusCode.INTERNAL_SERVER_ERROR_500);
+                    handleError(request, e, policyChain);
                 }
             }
         };
     }
 
-    private void handleError(Request request, Exception e, PolicyChain policyChain, int httpStatus) {
+    private void handleError(Request request, Exception e, PolicyChain policyChain) {
         request.metrics().setMessage(e.getMessage());
-        policyChain.streamFailWith(PolicyResult.failure(httpStatus, e.getMessage()));
+        policyChain.streamFailWith(PolicyResult.failure(HttpStatusCode.INTERNAL_SERVER_ERROR_500, e.getMessage()));
     }
 }

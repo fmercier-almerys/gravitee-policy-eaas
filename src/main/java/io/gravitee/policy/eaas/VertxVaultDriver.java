@@ -57,11 +57,11 @@ public class VertxVaultDriver  {
                         onError.accept(e);
                     }
                 } else {
-                    onError.accept(new IllegalArgumentException());
+                    onError.accept(new IllegalStateException());
                 }
             });
         }).exceptionHandler(ex -> {
-            onError.accept(new IllegalArgumentException(ex));
+            onError.accept(new IllegalStateException(ex));
         }).putHeader("X-Vault-Token", properties.getToken()).end(requestStr);
     }
 

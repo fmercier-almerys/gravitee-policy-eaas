@@ -17,7 +17,7 @@ package io.gravitee.policy.eaas.configuration;
 
 public class VaultProperties {
 
-    private String token = "9bf5c884-1479-bae6-cefb-3d54ccfc0cd7";
+    private String token = "ef1054f3-076f-6869-4c77-84286e9d1ace";
 
     private String host = "192.168.50.11";
 
