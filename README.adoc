@@ -1,0 +1,64 @@
+= Encryption as a Service Policy
+
+ifdef::env-github[]
+image:https://ci.gravitee.io/buildStatus/icon?job=gravitee-io/gravitee-policy-eaas/master["Build status", link="https://ci.gravitee.io/job/gravitee-io/job/gravitee-policy-eaas/"]
+image:https://badges.gitter.im/Join Chat.svg["Gitter", link="https://gitter.im/gravitee-io/gravitee-io?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge"]
+endif::[]
+
+== Phase
+
+[cols="2*", options="header"]
+|===
+^|onRequestContent
+^|onResponseContent
+
+^.^| X
+^.^| X
+
+|===
+
+== Description
+
+The Encryption as a Service policy (EAAS) allow to encrypt datas in Json Message with Gravitee.io gateway.
+It relies on https://www.vaultproject.io/[Hashicorp vault] project and https://www.vaultproject.io/docs/secrets/transit/index.html[transit secrets engine].
+This policy uses the Vault HTTP API to consumes Vault services.
+You need to deploy a vault server to use this policy, active Transit secret engine and define one or many transit keys.
+This policy works with a secured vault server and expect also a token for X-Vault-Token HTTP Header.
+
+To specify fields need to be ciphered, define with the JsonPointer format the full json path of each field.
+'*' wildcard can be used to reach nested objects and Json array value.
+Vault Server returns data encrypted as String hashes, so be carefull to your data types.
+
+== Configuration
+
+|===
+|Property |Required |Description |Type| Default
+
+.^|key
+^.^|X
+|Transit Key.
+^.^|string
+|None
+
+.^|fields
+^.^|X
+|Comma separated json pointers.
+^.^|string
+|None
+
+|===
+
+
+== Http Status Code
+
+|===
+|Code |Message
+
+.^| ```500```
+| In case of:
+
+* Invalid payload
+
+* Invalid connexion to Vault server
+
+|===

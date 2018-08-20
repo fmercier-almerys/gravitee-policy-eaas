@@ -21,29 +21,24 @@ public class VaultProperties {
 
     private String host = "192.168.50.11";
 
+    private String encryptionUrl = "/v1/transit/encrypt";
+
     private int port = 8200;
+
+    public String getEncryptionUrl() {
+        return encryptionUrl;
+    }
 
     public int getPort() {
         return port;
-    }
-
-    public void setPort(int port) {
-        this.port = port;
     }
 
     public String getToken() {
         return token;
     }
 
-    public void setToken(String token) {
-        this.token = token;
-    }
-
     public String getHost() {
         return host;
     }
 
-    public void setHost(String host) {
-        this.host = host;
-    }
 }
