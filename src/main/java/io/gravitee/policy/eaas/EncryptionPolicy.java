@@ -19,6 +19,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.fge.jackson.JsonLoader;
+import com.github.fabmrc.eaas.driver.vertx.VertxVaultDriver;
+import io.gravitee.policy.eaas.configuration.GraviteeVaultProperties;
 import io.gravitee.common.http.HttpHeaders;
 import io.gravitee.common.http.HttpStatusCode;
 import io.gravitee.gateway.api.ExecutionContext;
@@ -32,12 +34,12 @@ import io.gravitee.policy.api.PolicyChain;
 import io.gravitee.policy.api.PolicyResult;
 import io.gravitee.policy.api.annotations.OnRequestContent;
 import io.gravitee.policy.eaas.configuration.EncryptionPolicyConfiguration;
-import io.gravitee.policy.eaas.configuration.VaultProperties;
 import io.vertx.core.Vertx;
 import io.vertx.core.http.HttpClient;
 import io.vertx.core.http.HttpClientOptions;
-import org.gravitee.encryption.api.AsyncVaultEngine;
-import org.gravitee.encryption.api.EnhancedJsonNode;
+import com.github.fabmrc.eaas.api.AsyncVaultEngine;
+import com.github.fabmrc.eaas.api.EnhancedJsonNode;
+import com.github.fabmrc.eaas.api.VaultProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -53,15 +55,13 @@ public class EncryptionPolicy {
 
     private EncryptionPolicyConfiguration policyConfiguration;
 
-    private AsyncVaultEngine encryptEngine;
-
     private HttpClientOptions options;
 
     private VaultProperties properties;
 
     public EncryptionPolicy(EncryptionPolicyConfiguration policyConfiguration) {
         this.policyConfiguration = policyConfiguration;
-        properties = new VaultProperties();
+        properties = new GraviteeVaultProperties(policyConfiguration.getKey());
         options = new HttpClientOptions()
                 .setSsl(false)
                 .setTrustAll(true)
@@ -95,8 +95,8 @@ public class EncryptionPolicy {
                     List<String> resolvedPointers = enhancedJsonNode.getResolvedPointers(policyConfiguration.getPointers());
                     Vertx vertx = executionContext.getComponent(Vertx.class);
                     HttpClient httpClient = vertx.createHttpClient(options);
-                    VertxVaultDriver vaultDriver = new VertxVaultDriver(objectMapper, httpClient, policyConfiguration, properties);
-                    encryptEngine = new AsyncVaultEngine(vaultDriver);
+                    VertxVaultDriver vaultDriver = new VertxVaultDriver(objectMapper, httpClient, properties);
+                    AsyncVaultEngine encryptEngine = new AsyncVaultEngine(vaultDriver);
                     encryptEngine.encrypt(enhancedJsonNode, resolvedPointers, vaultResponse -> {
                         try {
                             String content = objectMapper.writeValueAsString(enhancedJsonNode.getJsonNode());

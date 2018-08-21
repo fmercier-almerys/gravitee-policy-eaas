@@ -15,28 +15,52 @@
  */
 package io.gravitee.policy.eaas.configuration;
 
-public class VaultProperties {
+import com.github.fabmrc.eaas.api.VaultProperties;
+
+public class GraviteeVaultProperties implements VaultProperties {
 
     private String token = "ef1054f3-076f-6869-4c77-84286e9d1ace";
+
+    private String key;
 
     private String host = "192.168.50.11";
 
     private String encryptionUrl = "/v1/transit/encrypt";
 
+    private String decryptionUrl = "/v1/transit/decrypt";
+
     private int port = 8200;
 
+    public GraviteeVaultProperties(String key) {
+        this.key = key;
+    }
+
+    @Override
+    public String getKey() {
+        return key;
+    }
+
+    @Override
+    public String getDecryptionUrl() {
+        return decryptionUrl;
+    }
+
+    @Override
     public String getEncryptionUrl() {
         return encryptionUrl;
     }
 
+    @Override
     public int getPort() {
         return port;
     }
 
+    @Override
     public String getToken() {
         return token;
     }
 
+    @Override
     public String getHost() {
         return host;
     }

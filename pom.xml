@@ -93,8 +93,14 @@
         </dependency>
 
         <dependency>
-            <groupId>org.gravitee.proto.vault</groupId>
+            <groupId>com.github.fabmrc.eaas</groupId>
             <artifactId>encryption-vault-api</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.fabmrc.eaas</groupId>
+            <artifactId>vertx-vault-restdriver</artifactId>
             <version>1.0.0-SNAPSHOT</version>
         </dependency>
 
@@ -103,7 +109,7 @@
             <groupId>com.github.fge</groupId>
             <artifactId>jackson-coreutils</artifactId>
             <version>1.8</version>
-            <scope>compile</scope>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
@@ -126,6 +132,14 @@
             <version>${mockito.version}</version>
             <scope>test</scope>
         </dependency>
+
+        <dependency>
+            <groupId>io.gravitee.gateway</groupId>
+            <artifactId>gravitee-gateway-buffer</artifactId>
+            <version>1.16.0-SNAPSHOT</version>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
 
     <build>
